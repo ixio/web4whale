@@ -6,11 +6,9 @@
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <style type="text/css">
       div.tooltip {
-        position: absolute;
-        text-align: center;
         color: black;
-        width: 200px;
-        height: 40px;
+        width: 300px;
+        height: 450px;
         padding: 2px;
         font: 12px sans-serif;
         background: grey;
@@ -23,7 +21,10 @@
   <body>
     <center>
       <h2>Detection faune Finistere</h2>
-      <div id="map"></div>
+      <table><tr>
+        <td><div id="map"></div></td>
+        <td><div id="info" class="tooltip"><div></td>
+      </tr></table>
     </center>
     <script type="text/javascript">
       var width = 500, height = 500;
@@ -50,9 +51,7 @@
             .attr("d", path);
     });
 
-    var div = d3.select("body").append("div")   
-                .attr("class", "tooltip")               
-                .style("opacity", 0);
+    var div = d3.select("#info");
 
     var curr_dot = null;
     var flickr_csv_url = "https://bitbucket.org/!api/2.0/snippets/Ixio/44zGby/7c11897c55b88c53817be317e6df24a849ed8211/files/flickr_dauphins_bretagne.csv";
@@ -71,22 +70,12 @@
                 .attr("r", 5)
                 .style("fill", "black")
                 .on("mouseover", function(d) {
+                  console.log(i, infodot)
                   if (curr_dot != null) { curr_dot.style("fill", "black") };
                   curr_dot = d3.select(this);
                   d3.select(this).style("fill", "blue");
-                  div.transition()        
-                      .duration(200)
-                      .style("opacity", .9);      
                   div.html("<b>Coordinates:</b><br>Latitude: " + infodot['lat']
                            + "<br>Longitude: " + infodot['lon'])
-                      .style("left", (d3.event.pageX + 30) + "px")     
-                      .style("top", (d3.event.pageY - 30) + "px")
-                })
-                .on("mouseout", function(d) {
-                    div.transition()
-                        .duration(500)
-                        .style("opacity", 0);
-                    div.html("")
                 });
       }}});
     </script>
