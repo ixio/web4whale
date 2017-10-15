@@ -13,8 +13,6 @@
         font: 12px sans-serif;
         background: grey;
         border: 0px;
-        border-radius: 8px;
-        pointer-events: none;
       }     
     </style>
   </head>
@@ -58,7 +56,13 @@
     var flickr_csv_url = "https://bitbucket.org/!api/2.0/snippets/Ixio/44zGby/7c11897c55b88c53817be317e6df24a849ed8211/files/flickr_dauphins_bretagne.csv";
     d3.csv(flickr_csv_url, 
       function(row) { 
-        return { 'lon': row.longitude, 'lat': row.latitude }
+        return { 'lon': row.longitude,
+                  'lat': row.latitude,
+                  'title': row.title,
+                  'url': row.url,
+                  'date': row.date,
+                  'place': [row.locality, row.county, row.region, row.country]
+                 }
       }, 
       function(infdts) {
         infodots = infdts;
@@ -77,8 +81,13 @@
                   if (curr_dot != null) { curr_dot.style("fill", "black") };
                   curr_dot = d3.select(this);
                   d3.select(this).style("fill", "blue");
-                  div.html("<b>Coordinates:</b><br>Latitude: " + infodot['lat']
-                           + "<br>Longitude: " + infodot['lon'])
+                  div.html("<b>Photo Flickr:</b>"
+                           + "<br>" + infodot['title']
+                           + "<br><a href='" + infodot['url'] + "'>" + infodot['url'] + "</a>"
+                           + "<br><b>Date:</b> " + infodot['date']
+                           + "<br><b>Coordinates:</b><br>Latitude: " + infodot['lat']
+                           + "<br>Longitude: " + infodot['lon']
+                           + "<br>" + infodot['place'])
                 });
       }}});
     </script>
