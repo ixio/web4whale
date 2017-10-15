@@ -25,7 +25,7 @@
       <div id="map"></div>
     </center>
     <script type="text/javascript">
-      var width = 800, height = 800;
+      var width = 500, height = 500;
       var path = d3.geoPath();
       var projection = d3.geoConicConformal()
         .center([-4.076408, 48.282123])
@@ -40,13 +40,30 @@
  
       var dep = svg.append("g");
       dep.style("fill", "#42d9f4")
-      d3.json('https://bitbucket.org/!api/2.0/snippets/Ixio/B5bMdj/3b6af32193eb1d0105177d5d2972300bf1402504/files/d29.json', function(req, geojson) {
+      var d29_json_url = 'https://bitbucket.org/!api/2.0/snippets/Ixio/B5bMdj/3b6af32193eb1d0105177d5d2972300bf1402504/files/d29.json';
+      d3.json(d29_json_url, function(req, geojson) {
         dep.selectAll("path")
             .data(geojson.features)
             .enter()
             .append("path")
             .attr("d", path);
     });
+
+    var flickr_csv_url = "https://bitbucket.org/!api/2.0/snippets/Ixio/44zGby/7c11897c55b88c53817be317e6df24a849ed8211/files/flickr_dauphins_bretagne.csv";
+    d3.csv(flickr_csv_url, 
+      function(row) { 
+        return [ row.longitude, row.latitude ] }, 
+      function(coors) {
+        for (var i = 0; i < coors.length; i++) {
+          var coordinates = projection(coors[i]);
+          console.log(coordinates)
+          if (!(isNaN(coordinates[0]) || isNaN(coordinates[1]))) {
+            svg.append("circle")
+                .attr("cx", coordinates[0])
+                .attr("cy", coordinates[1])
+                .attr("r", 5)
+                .style("fill", "black");
+      }}});
     </script>
   </body>
 </html>
