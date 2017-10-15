@@ -54,6 +54,7 @@
                 .attr("class", "tooltip")               
                 .style("opacity", 0);
 
+    var curr_dot = null;
     var flickr_csv_url = "https://bitbucket.org/!api/2.0/snippets/Ixio/44zGby/7c11897c55b88c53817be317e6df24a849ed8211/files/flickr_dauphins_bretagne.csv";
     d3.csv(flickr_csv_url, 
       function(row) { 
@@ -70,6 +71,9 @@
                 .attr("r", 5)
                 .style("fill", "black")
                 .on("mouseover", function(d) {
+                  if (curr_dot != null) { curr_dot.style("fill", "black") };
+                  curr_dot = d3.select(this);
+                  d3.select(this).style("fill", "blue");
                   div.transition()        
                       .duration(200)
                       .style("opacity", .9);      
