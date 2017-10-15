@@ -54,23 +54,26 @@
     var div = d3.select("#info");
 
     var curr_dot = null;
+    var infodots = null;
     var flickr_csv_url = "https://bitbucket.org/!api/2.0/snippets/Ixio/44zGby/7c11897c55b88c53817be317e6df24a849ed8211/files/flickr_dauphins_bretagne.csv";
     d3.csv(flickr_csv_url, 
       function(row) { 
         return { 'lon': row.longitude, 'lat': row.latitude }
       }, 
-      function(infodots) {
+      function(infdts) {
+        infodots = infdts;
         for (var i = 0; i < infodots.length; i++) {
           infodot = infodots[i]
           var coordinates = projection([ infodot['lon'], infodot['lat'] ]);
           if (!(isNaN(coordinates[0]) || isNaN(coordinates[1]))) {
             svg.append("circle")
+                .attr("id", i)
                 .attr("cx", coordinates[0])
                 .attr("cy", coordinates[1])
                 .attr("r", 5)
                 .style("fill", "black")
                 .on("mouseover", function(d) {
-                  console.log(i, infodot)
+                  infodot = infodots[this.id]
                   if (curr_dot != null) { curr_dot.style("fill", "black") };
                   curr_dot = d3.select(this);
                   d3.select(this).style("fill", "blue");
